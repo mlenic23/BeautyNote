@@ -57,6 +57,7 @@ data class Product(
     var type: String = "",
     var price: String = "",
     var rating: String = "",
+    var isUsed: Boolean = false
 )
 
 data class Description(
@@ -80,7 +81,8 @@ val products: List<Product> = listOf(
         ),
         type = "Face",
         price = "30€",
-        rating = "4"
+        rating = "4",
+        isUsed = false,
     ),
 
     Product(
@@ -95,7 +97,9 @@ val products: List<Product> = listOf(
         ),
         type = "Eyes",
         price = "21",
-        rating = "5"
+        rating = "5",
+        isUsed = false,
+
     ),
 
     Product(
@@ -110,7 +114,8 @@ val products: List<Product> = listOf(
         ),
         type = "Lips",
         price = "13",
-        rating = "3"
+        rating = "3",
+        isUsed = false,
 
     )
 
@@ -363,8 +368,8 @@ fun ProductCard(
     Box(
         modifier = Modifier
             .width(270.dp)
-            .height(270.dp)
-            .padding(top=20.dp, bottom = 20.dp)
+            .height(290.dp)
+            .padding(top=20.dp, bottom = 18.dp)
     ) {
         Image(
             painter = painterResource(imageResource),

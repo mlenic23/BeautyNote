@@ -12,7 +12,7 @@ object Routes {
     const val SCREEN_PRODUCTS_DETAILS = "productDetails/{productId}"
 
     fun getProductDetailsPath(productId: Int): String {
-        return "productDetails/$productId" // Ispravna ruta
+        return "productDetails/$productId"
     }
 }
 @Composable

@@ -24,8 +24,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -90,8 +96,10 @@ fun ProductList(
 @Composable
 fun TopImageAndBar(
     @DrawableRes coverImage: Int,
-    navigation: NavController
+    navigation: NavController,
+    product: Product
 ) {
+    var isUsed by remember { mutableStateOf(product.isUsed) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -103,7 +111,7 @@ fun TopImageAndBar(
                 .fillMaxHeight()
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,8 +119,19 @@ fun TopImageAndBar(
                     .height(56.dp)
                     .padding(horizontal = 16.dp)
             ) {
-                CircularButton(R.drawable.ic_arrow_back, onClick = {navigation.navigate(Routes.SCREEN_ALL_PRODUCTS)})
+                CircularButton(
+                    R.drawable.ic_arrow_back, color =  Color(0xffc51162),  onClick = { navigation.navigate(Routes.SCREEN_ALL_PRODUCTS) })
+                StatusButton(
+                    iconResource = if (isUsed) R.drawable.tick else R.drawable.x__1_,
+                    color = if (isUsed) Color(0xffc51162) else Color.LightGray,
+                    text = if (isUsed) "New" else "Empty",
+                    onClick = {
+                        isUsed = !isUsed
+                        product.isUsed = isUsed
+                    }
+                )
             }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -133,20 +152,19 @@ fun TopImageAndBar(
 @Composable
 fun CircularButton(
     @DrawableRes iconResource: Int,
-    color: Color = Gray,
-    elevation: ButtonElevation? =
-        ButtonDefaults.buttonElevation(defaultElevation = 12.dp),
+    color: Color=White,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(defaultElevation = 12.dp),
     onClick: () -> Unit = {}
 ) {
     Button(
         contentPadding = PaddingValues(),
         elevation = elevation,
         onClick = { onClick() },
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xffc51162), contentColor = Color.White),
+        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = White),
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
-            .width(38.dp)
-            .height(38.dp)
+            .width(35.dp)
+            .height(35.dp)
     ) {
         Icon(
             painter = painterResource(id = iconResource),
@@ -156,11 +174,48 @@ fun CircularButton(
 }
 
 @Composable
+fun StatusButton(
+    @DrawableRes iconResource: Int,
+    color: Color=White,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(defaultElevation = 12.dp),
+    onClick: () -> Unit = {},
+    text : String
+) {
+    Column(){
+    Button(
+        contentPadding = PaddingValues(),
+        elevation = elevation,
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = White),
+        shape = RoundedCornerShape(5.dp),
+        modifier = Modifier
+            .width(35.dp)
+            .height(35.dp)
+    ) {
+            Icon(
+                painter = painterResource(id = iconResource),
+                contentDescription = null,
+                modifier = Modifier.size(17.dp)
+            )
+
+        }
+        Text(
+            text = text,
+            color = Color.Black,)
+    }
+
+}
+
+
+
+
+@Composable
 fun ScreenInfo(
     name: String,
     brand: String,
     @DrawableRes imageResource: Int,
 ) {
+
     Column {
 
         Image(
@@ -357,9 +412,11 @@ fun ListButton() {
 @Composable
 fun ProductDetailsScreen(
     navigation: NavController,
-    productId: Int
+    productId: Int,
+
 ) {
     val product = products.getOrNull(productId) ?: return
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -382,12 +439,14 @@ fun ProductDetailsScreen(
             item {
                 TopImageAndBar(
                     coverImage = product.image,
-                    navigation = navigation
+                    navigation = navigation,
+                    product = product
                 )
                 ScreenInfo(product.name, product.brand, product.image)
                 BasicInfo(product)
                 Description(product)
                 ListButton()
+
             }
         }
     }
@@ -401,13 +460,16 @@ fun IconButton(
 ) {
     Button(
         onClick = { /*TODO*/ },
-        colors = ButtonDefaults.buttonColors(containerColor = White, contentColor = Color(0xffc2185b)),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = White,
+            contentColor = Color(0xffc2185b)
+        ),
         shape = RoundedCornerShape(80),
         modifier = Modifier
             .height(60.dp)
 
 
-    ){
+    ) {
         Row {
             Icon(
                 painter = painterResource(id = iconResource),
@@ -429,4 +491,6 @@ fun IconButton(
         }
     }
 }
+
+
 
