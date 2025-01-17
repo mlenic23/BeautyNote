@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 object Routes {
     const val SCREEN_ALL_PRODUCTS = "productsList"
     const val SCREEN_PRODUCTS_DETAILS = "productDetails/{productId}"
+    const val SCREEN_LIST = "List"
 
     fun getProductDetailsPath(productId: Int): String {
         return "productDetails/$productId"
@@ -35,6 +36,10 @@ fun NavigationController(navController: NavHostController) {
                 navigation = navController,
                 productId = productId // Prosleđujemo productId
             )
+        }
+
+        composable(Routes.SCREEN_LIST) {
+            ListScreen(navigation = navController)
         }
     }
 }

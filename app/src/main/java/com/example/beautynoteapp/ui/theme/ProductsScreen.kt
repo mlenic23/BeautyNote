@@ -60,6 +60,7 @@ data class Product(
     var isUsed: Boolean = false
 )
 
+
 data class Description(
     var fullName: String = "",
     var shade: String = "",
@@ -129,7 +130,7 @@ fun BeautyNoteScreen(navigation: NavController) {
         modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(colors = listOf(Color(0xfffce4ec), Color(0xffc2185b))))
     ) {
 
-        ChoiceButton()
+        ChoiceButton(navController = navigation)
 
         ScreenTitle(
             title = "BeautyNote",
@@ -264,12 +265,22 @@ fun TabButton(
     onClick: () -> Unit
 ) {
     Button(
+        onClick = onClick,
         shape = RoundedCornerShape(24.dp),
         elevation = null,
-        colors = if (isActive) ButtonDefaults.buttonColors(contentColor = White, containerColor = Color(0xffc2185b))
-        else ButtonDefaults.buttonColors(contentColor = Color(0xffc2185b), containerColor = White),
+        colors = if (isActive) {
+            ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = Color(0xffc2185b)
+            )
+        } else {
+
+            ButtonDefaults.buttonColors(
+                contentColor = Color(0xffc2185b),
+                containerColor = Color.White
+            )
+        },
         modifier = Modifier.fillMaxHeight(),
-        onClick = { onClick() }
     ) {
         Text(text)
     }
@@ -312,10 +323,8 @@ fun MakeupCategories() {
     }
 }
 
-
-
 @Composable
-fun ChoiceButton() {
+fun ChoiceButton(navController: NavController) {
     var currentActiveButton by remember { mutableStateOf(0) }
 
     Row(
@@ -332,6 +341,7 @@ fun ChoiceButton() {
             isActive = currentActiveButton == 0
         ) {
             currentActiveButton = 0
+            navController.navigate(Routes.SCREEN_ALL_PRODUCTS)
         }
 
         Spacer(modifier = Modifier.width(15.dp))
@@ -341,6 +351,7 @@ fun ChoiceButton() {
             isActive = currentActiveButton == 1
         ) {
             currentActiveButton = 1
+            navController.navigate(Routes.SCREEN_LIST)
         }
     }
     Spacer(modifier = Modifier.width(4.dp))
@@ -388,10 +399,12 @@ fun ProductCard(
             Text(title, color = Color(0xffad1457))
             Text(subtitle, color = Color(0xffff80ab))
             // Corrected navigation logic
-            Button(onClick = {
-                // Navigate to the details screen with the correct productId
-                navigation.navigate(Routes.getProductDetailsPath(productId))
-            }) {
+            Button(
+                onClick = {
+                    navigation.navigate(Routes.getProductDetailsPath(productId))
+                },
+                colors =  ButtonDefaults.buttonColors(contentColor = Color(0xfff8bbd0), containerColor = Color(0xffc2185b))
+            ) {
                 Text(text = "See details")
             }
         }

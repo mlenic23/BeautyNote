@@ -24,10 +24,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,17 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -421,7 +415,6 @@ fun ProductDetailsScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Pozadina (slika)
         Image(
             painter = painterResource(id = R.drawable.backgrounddetail),
             contentDescription = "Background Image",
@@ -456,12 +449,12 @@ fun ProductDetailsScreen(
 @Composable
 fun IconButton(
     @DrawableRes iconResource: Int,
-    text: String
+    text: String,
 ) {
     Button(
         onClick = { /*TODO*/ },
         colors = ButtonDefaults.buttonColors(
-            containerColor = White,
+            containerColor = Color(0xfff8bbd0),
             contentColor = Color(0xffc2185b)
         ),
         shape = RoundedCornerShape(80),
