@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -36,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -69,9 +69,9 @@ data class Description(
     var collection: String = "",
 )
 
-val products: List<Product> = listOf(
+var products: MutableList<Product> = mutableListOf(
     Product(
-        id = "1",
+        id = "0",
         image = R.drawable.powder_vichy,
         name = "Powder",
         brand = "Vichy",
@@ -87,84 +87,143 @@ val products: List<Product> = listOf(
     ),
 
     Product(
-        id = "2",
+        id = "1",
         image = R.drawable.mascara_maybelline,
         name = "Mascara",
-        brand = "Vichy",
-        description = listOf(Description(fullName = "Vichy liftactiv flexiteint anti-wrinkle liquid powder" ,
-            shade = "45 gold", packaging = "30ml", purpose = "Liquid anti-wrinkle powder with a tightening silicone texture for an immediate lifting effect and a healthy skin glow without stiffening facial features.",
-            collection = "Vichy lifeactiv")
+        brand = "Maybelline",
+        description = listOf(Description(fullName = "Lash Sensational Mascara Firework" ,
+            shade = "Black", packaging = "10ml", purpose = "Mascara for defined eyelashes full of volume, without lumps",
+            collection = "Lash Sensational")
 
         ),
         type = "Eyes",
-        price = "21",
+        price = "21€",
         rating = "5",
         isUsed = false,
 
     ),
 
     Product(
-        id = "3",
+        id = "2",
         image = R.drawable.ruz_mac,
         name = "Lipstick",
         brand = "Mac",
-        description = listOf(Description(fullName = "Vichy liftactiv flexiteint anti-wrinkle liquid powder" ,
-            shade = "45 gold", packaging = "30ml", purpose = "Liquid anti-wrinkle powder with a tightening silicone texture for an immediate lifting effect and a healthy skin glow without stiffening facial features.",
-            collection = "Vichy lifeactiv")
+        description = listOf(Description(fullName = "MACximal Silky Matte Lipstick",
+            shade = "Mehr", packaging = "3.5ml", purpose = "Lipstick provides rich, long-lasting color for up to 12 hours nourishes and hydrates thanks to its nourishing composition provides full color coverage with a matte finish.",
+            collection = "MAC Powder Kiss")
 
         ),
         type = "Lips",
-        price = "13",
+        price = "20€",
         rating = "3",
         isUsed = false,
 
-    )
+    ),
+
+    Product(
+        id = "3",
+        image = R.drawable.brows_gel,
+        name = "Brow gel",
+        brand = "Essence",
+        description = listOf(Description(fullName = "Make Me Brow Eyebrow Gel Mascara",
+            shade = "04 Ashy Brows", packaging = "3.8ml", purpose = "Colored eyebrow gel with fine fibers that fills, shapes and gives a natural look to the eyebrows.",
+            collection = "Essence Make Me Brow")
+
+        ),
+        type = "Brows",
+        price = "3€",
+        rating = "2",
+        isUsed = false,
+
+        )
 
 )
 
 @Composable
 fun BeautyNoteScreen(navigation: NavController) {
-    Column(
+    // Koristimo mutableStateOf za pohranu liste proizvoda
+    var productsList by remember { mutableStateOf(products.toMutableList()) }  // Početni proizvodi
+
+    var selectedType by remember { mutableStateOf("Face") }
+    var searchQuery by remember { mutableStateOf("") }
+
+    LazyColumn(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(colors = listOf(Color(0xfffce4ec), Color(0xffc2185b))))
-    ) {
-
-        ChoiceButton(navController = navigation)
-
-        ScreenTitle(
-            title = "BeautyNote",
-            subtitle = "\"Discover your beauty collection.\""
-        )
-
-        AppLogo()
-
-        ProductSearchBar(iconResource = R.drawable.ic_search, labelText = "Search products")
-
-        MakeupCategories()
-
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            items(products.size) { index ->
-                ProductCard(
-                    imageResource = products[index].image,
-                    title = products[index].name,
-                    subtitle = products[index].brand,
-                    productId = index, // Koristimo indeks za identifikaciju proizvoda
-                    navigation = navigation // Prosleđujemo NavController
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(Color(0xfffce4ec), Color(0xffc2185b))
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+            )
+    ) {
+        item {
+            ChoiceButton(navController = navigation)
+        }
+
+        item {
+            ScreenTitle(
+                title = "BeautyNote",
+                subtitle = "\"Discover your beauty collection.\""
+            )
+        }
+
+        item {
+            AppLogo()
+        }
+
+        item {
+            ProductSearchBar(
+                iconResource = R.drawable.ic_search,
+                labelText = "Search by brand",
+                onSearch = { query -> searchQuery = query }
+            )
+        }
+
+        item {
+            MakeupCategories(selectedType = selectedType) { newType ->
+                selectedType = newType
             }
         }
 
-        IconButton(iconResource = R.drawable.ic_plus, text="Add new product")
+        val filteredProducts = productsList.filter {
+            it.type == selectedType && it.brand.contains(searchQuery, ignoreCase = true)
+        }
+
+        item {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(filteredProducts.size) { index ->
+                    ProductCard(
+                        imageResource = filteredProducts[index].image,
+                        title = filteredProducts[index].name,
+                        subtitle = filteredProducts[index].brand,
+                        productId = filteredProducts[index].id,
+                        navigation = navigation
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
+        }
+
+        item {
+            IconButton(
+                iconResource = R.drawable.ic_plus, // Ikona za dodavanje proizvoda
+                text = "Add new product",
+                onClick = {
+                    navigation.navigate(Routes.SCREEN_ADD_PRODUCT) // Navigacija na ekran za dodavanje proizvoda
+                }
+            )
+        }
     }
 }
 
-@Composable
+
+    @Composable
 fun ScreenTitle(title: String, subtitle: String) {
     Box(
         modifier = Modifier
@@ -214,6 +273,7 @@ fun ScreenTitle(title: String, subtitle: String) {
 fun ProductSearchBar(
     @DrawableRes iconResource: Int,
     labelText: String,
+    onSearch: (String) -> Unit,
 
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(
         containerColor = Color.Transparent,
@@ -230,12 +290,11 @@ fun ProductSearchBar(
 ) {
     var searchInput by remember { mutableStateOf("") }
 
-
     TextField(
         value = searchInput,
         onValueChange = {
             searchInput = it
-            // onSearch(it)
+            onSearch(it)
         },
         label = { Text(labelText) },
         leadingIcon = {
@@ -287,8 +346,10 @@ fun TabButton(
 }
 
 @Composable
-fun MakeupCategories() {
-    var currentActiveButton by remember { mutableStateOf(0) }
+fun MakeupCategories(selectedType: String, onTypeSelected: (String) -> Unit) {
+
+    val categories = listOf("Face", "Eyes", "Lips", "Brows")
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -300,26 +361,16 @@ fun MakeupCategories() {
 
 
     ) {
-        TabButton(text = "Face", isActive = currentActiveButton == 0
-        ){
-            currentActiveButton = 0
+        categories.forEachIndexed { index, category ->
+            TabButton(
+                text = category,
+                isActive = selectedType == category,
+                onClick = { onTypeSelected(category) }
+            )
+            if (index < categories.size - 1) {
+                Spacer(modifier = Modifier.width(4.dp))
+            }
         }
-        Spacer(modifier = Modifier.width(4.dp))
-
-        TabButton(text = "Eyes", isActive = currentActiveButton == 1) {
-            currentActiveButton = 1
-        }
-        Spacer(modifier = Modifier.width(4.dp))
-
-        TabButton(text="Lips", isActive = currentActiveButton == 2) {
-            currentActiveButton = 2
-        }
-        Spacer(modifier = Modifier.width(4.dp))
-
-        TabButton(text="Brows", isActive = currentActiveButton == 3) {
-            currentActiveButton = 3
-        }
-        Spacer(modifier = Modifier.width(4.dp))
     }
 }
 
@@ -373,7 +424,7 @@ fun ProductCard(
     @DrawableRes imageResource: Int,
     title: String,
     subtitle: String,
-    productId: Int,
+    productId: String,
     navigation: NavController,
 ) {
     Box(
@@ -410,6 +461,13 @@ fun ProductCard(
         }
     }
 }
+
+
+
+
+
+
+
 
 
 

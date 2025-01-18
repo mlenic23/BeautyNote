@@ -199,10 +199,6 @@ fun StatusButton(
     }
 
 }
-
-
-
-
 @Composable
 fun ScreenInfo(
     name: String,
@@ -450,9 +446,10 @@ fun ProductDetailsScreen(
 fun IconButton(
     @DrawableRes iconResource: Int,
     text: String,
+    onClick: () -> Unit // Dodajemo parametar za prosljeđivanje funkcije koja će biti pozvana na klik
 ) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick, // Pozivamo proslijeđeni onClick callback
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xfff8bbd0),
             contentColor = Color(0xffc2185b)
@@ -460,10 +457,11 @@ fun IconButton(
         shape = RoundedCornerShape(80),
         modifier = Modifier
             .height(60.dp)
-
-
+            .padding(bottom = 10.dp)
     ) {
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically // Vertikalno poravnavanje ikone i teksta
+        ) {
             Icon(
                 painter = painterResource(id = iconResource),
                 contentDescription = text,
@@ -471,7 +469,7 @@ fun IconButton(
                 modifier = Modifier.size(18.dp)
             )
 
-            Spacer(Modifier.width(2.dp))
+            Spacer(Modifier.width(8.dp)) // Veći razmak između ikone i teksta
 
             Text(
                 text = text,
@@ -484,6 +482,8 @@ fun IconButton(
         }
     }
 }
+
+
 
 
 

@@ -11,11 +11,13 @@ object Routes {
     const val SCREEN_ALL_PRODUCTS = "productsList"
     const val SCREEN_PRODUCTS_DETAILS = "productDetails/{productId}"
     const val SCREEN_LIST = "List"
+    const val SCREEN_ADD_PRODUCT = "addProductScreen"
 
-    fun getProductDetailsPath(productId: Int): String {
+    fun getProductDetailsPath(productId: String): String {
         return "productDetails/$productId"
     }
 }
+
 @Composable
 fun NavigationController(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Routes.SCREEN_ALL_PRODUCTS) {
@@ -30,16 +32,24 @@ fun NavigationController(navController: NavHostController) {
                 }
             )
         ) { backStackEntry ->
-            // Preuzimamo productId sa navArgument
             val productId = backStackEntry.arguments?.getInt("productId") ?: 0
             ProductDetailsScreen(
                 navigation = navController,
-                productId = productId // Prosleđujemo productId
+                productId = productId
             )
         }
 
         composable(Routes.SCREEN_LIST) {
             ListScreen(navigation = navController)
+        }
+
+        composable(Routes.SCREEN_ADD_PRODUCT) {
+            AddProductScreen(
+                navigation = navController,
+                onProductAdded = { newProduct ->
+                    products.add(newProduct)
+                }
+            )
         }
     }
 }
