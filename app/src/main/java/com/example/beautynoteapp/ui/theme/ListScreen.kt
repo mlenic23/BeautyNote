@@ -2,32 +2,161 @@ package com.example.beautynoteapp.ui.theme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
 import androidx.navigation.NavController
 import com.example.beautynoteapp.R
+import com.example.beautynoteapp.data.ProductViewModel
 
+
+data class ProductList(
+    var name: String,
+    var brand: String
+)
 
 @Composable
-fun ListScreen(navigation: NavController){
+fun ListScreen(navigation: NavController, viewModel: ProductViewModel, currentActiveButton: Int, onButtonClick: (Int) -> Unit) {
 
+    // UI elements
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.listbackground),
+            painter = painterResource(id = R.drawable.back9),
             contentDescription = "Background Image",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+    }
 
-        ChoiceButton(navController = navigation)
+    var newProductName by remember { mutableStateOf("") }
+    var newProductBrand by remember { mutableStateOf("") }
+    var isAddingProduct by remember { mutableStateOf(false) }
 
+    // Function to add a product
+    fun addProduct(name: String, brand: String) {
+        if (name.isNotBlank() && brand.isNotBlank()) {
+            viewModel.addProduct(name, brand)
+            newProductName = ""
+            newProductBrand = ""
+            isAddingProduct = false
+        }
+    }
+
+    // Function to delete a product
+    fun deleteProduct(index: Int) {
+        viewModel.deleteProduct(index)
+    }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+
+        ChoiceButton(
+            navController = navigation,
+            currentActiveButton = currentActiveButton,
+            onButtonClick = onButtonClick
+        )
+
+        ScreenTitle(
+            title = "BeautyNote",
+            subtitle= "\"Life is short, buy the makeup.\""
+        )
+
+        Spacer(modifier = Modifier.padding(top = 20.dp))
+
+        // Display product list
+        LazyColumn() {
+            itemsIndexed(viewModel.productList) { index, product ->  // Use the ViewModel's product list
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = "${product.name} - ${product.brand}",
+                        modifier = Modifier.weight(1f),
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.DarkGray
+                        )
+                    )
+
+                    CircularButton(
+                        iconResource = R.drawable.x__1_,
+                        color = Color(0xfff48fb1),
+                        onClick = { deleteProduct(index) }
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(modifier = Modifier.padding(start = 95.dp, top = 10.dp)) {
+            IconButton(
+                onClick = { isAddingProduct = true },
+                iconResource = R.drawable.ic_plus,
+                text = "Add new Product"
+            )
+        }
+
+        if (isAddingProduct) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                TextField(
+                    value = newProductName,
+                    onValueChange = { newProductName = it },
+                    label = { Text("Product Name") },
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
+                TextField(
+                    value = newProductBrand,
+                    onValueChange = { newProductBrand = it },
+                    label = { Text("Product Brand") },
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
+                CircularButton(
+                    onClick = { addProduct(newProductName, newProductBrand) },
+                    color = Color(0xffc51162),
+                    iconResource = R.drawable.tick,
+                )
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,9 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -44,52 +48,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.beautynoteapp.R
-
-
-/*@Composable
-fun ProductList(
-    products: List<Product>,
-    navigation: NavController
-) {
-    Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        ) {
-            Text(
-                text = "7 recipes",
-                style = TextStyle(color = Color.DarkGray, fontSize =
-                14.sp)
-            )
-        }
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            items(products.size) { index ->
-
-                ProductCard(
-                    imageResource = products[index].image,
-                    title = products[index].name,
-                    subtitle = products[index].brand,
-                    productId = index,
-                    navigation = navigation
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-        }
-    }
-}*/
+import com.example.beautynoteapp.Routes
+import com.example.beautynoteapp.data.Product
 
 
 @Composable
 fun TopImageAndBar(
-    @DrawableRes coverImage: Int,
+    imageResource: String,
     navigation: NavController,
     product: Product
 ) {
@@ -98,12 +65,23 @@ fun TopImageAndBar(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxHeight()
         ) {
+
+            val painter = rememberAsyncImagePainter(model = imageResource)
+
+            Image(
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .clip(RoundedCornerShape(12.dp))
+            )
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -112,9 +90,11 @@ fun TopImageAndBar(
                     .statusBarsPadding()
                     .height(56.dp)
                     .padding(horizontal = 16.dp)
+
             ) {
                 CircularButton(
-                    R.drawable.ic_arrow_back, color =  Color(0xffc51162),  onClick = { navigation.navigate(Routes.SCREEN_ALL_PRODUCTS) })
+                    R.drawable.ic_arrow_back, color =  Color(0xffc51162),  onClick = { navigation.navigate(
+                        Routes.SCREEN_ALL_PRODUCTS) })
                 StatusButton(
                     iconResource = if (isUsed) R.drawable.tick else R.drawable.x__1_,
                     color = if (isUsed) Color(0xffc51162) else Color.LightGray,
@@ -167,6 +147,7 @@ fun CircularButton(
     }
 }
 
+
 @Composable
 fun StatusButton(
     @DrawableRes iconResource: Int,
@@ -199,17 +180,18 @@ fun StatusButton(
     }
 
 }
+
 @Composable
 fun ScreenInfo(
     name: String,
     brand: String,
-    @DrawableRes imageResource: Int,
+    imageResource: String,
 ) {
 
     Column {
 
         Image(
-            painter = painterResource(imageResource),
+            painter = rememberAsyncImagePainter(model = imageResource),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -260,6 +242,7 @@ fun InfoColumn(
 
     }
 }
+
 @Composable
 fun BasicInfo(product: Product) {
     Row(
@@ -332,8 +315,8 @@ fun Description(product: Product) {
             }}
 
             Column(
-                verticalArrangement = Arrangement.Center, // Centriranje u vertikalnom smjeru
-                horizontalAlignment = Alignment.Start, // Poravnanje lijevo
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
             if (desc.purpose.isNotEmpty()) {
@@ -378,7 +361,6 @@ fun Description(product: Product) {
 }
 
 
-
 @Composable
 fun ListButton() {
     Button(
@@ -402,15 +384,26 @@ fun ListButton() {
 @Composable
 fun ProductDetailsScreen(
     navigation: NavController,
-    productId: Int,
-
+    productId: String
 ) {
-    val product = products.getOrNull(productId) ?: return
+    // Pronađi proizvod na osnovu ID-a
+    val product = products.find { it.id == productId }
 
+    // Ako proizvod nije pronađen, prikaži poruku
+    if (product == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Product not found", color = Color.Red)
+        }
+        return
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+        // Pozadina
         Image(
             painter = painterResource(id = R.drawable.backgrounddetail),
             contentDescription = "Background Image",
@@ -418,38 +411,52 @@ fun ProductDetailsScreen(
             contentScale = ContentScale.Crop
         )
 
+        // Detalji proizvoda
         LazyColumn(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 16.dp) // Ovdje možete dodati padding da ne bude previše uz rubove
+                .padding(top = 16.dp)
         ) {
             item {
+                // Gornja slika i navigaciona traka
                 TopImageAndBar(
-                    coverImage = product.image,
+                    imageResource = product.image,
                     navigation = navigation,
                     product = product
                 )
-                ScreenInfo(product.name, product.brand, product.image)
-                BasicInfo(product)
-                Description(product)
-                ListButton()
 
+                // Informacije o proizvodu
+                ScreenInfo(
+                    name = product.name,
+                    brand = product.brand,
+                    imageResource = product.image
+                )
+
+                // Osnovne informacije
+                BasicInfo(product)
+
+                // Opis proizvoda
+                Description(product)
+
+                // Dugme za listu
+                ListButton()
             }
         }
     }
 }
 
 
+
 @Composable
 fun IconButton(
     @DrawableRes iconResource: Int,
     text: String,
-    onClick: () -> Unit // Dodajemo parametar za prosljeđivanje funkcije koja će biti pozvana na klik
+    onClick: () -> Unit
 ) {
     Button(
-        onClick = onClick, // Pozivamo proslijeđeni onClick callback
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xfff8bbd0),
             contentColor = Color(0xffc2185b)
@@ -460,7 +467,7 @@ fun IconButton(
             .padding(bottom = 10.dp)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically // Vertikalno poravnavanje ikone i teksta
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 painter = painterResource(id = iconResource),
@@ -469,7 +476,7 @@ fun IconButton(
                 modifier = Modifier.size(18.dp)
             )
 
-            Spacer(Modifier.width(8.dp)) // Veći razmak između ikone i teksta
+            Spacer(Modifier.width(8.dp))
 
             Text(
                 text = text,

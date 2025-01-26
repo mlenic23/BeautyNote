@@ -2,6 +2,7 @@
 
 package com.example.beautynoteapp.ui.theme
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -47,37 +47,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.beautynoteapp.R
-
-data class Product(
-    var id: String = "",
-    @DrawableRes val image: Int = 0,
-    var name: String = "",
-    var brand: String = "",
-    var description: List<Description> = listOf(),
-    var type: String = "",
-    var price: String = "",
-    var rating: String = "",
-    var isUsed: Boolean = false
-)
-
-
-data class Description(
-    var fullName: String = "",
-    var shade: String = "",
-    var packaging: String = "",
-    var purpose: String = "",
-    var collection: String = "",
-)
+import com.example.beautynoteapp.Routes
+import coil.compose.rememberAsyncImagePainter
+import com.example.beautynoteapp.data.Product
 
 var products: MutableList<Product> = mutableListOf(
     Product(
         id = "0",
-        image = R.drawable.powder_vichy,
+        image = "https://www.lijepa.hr/data/cache/thumb_min500_max1000-min500_max1000-12/products/339187/1683200741/vichy-liftactiv-flexiteint-spf20-puder-za-zene-30-ml-odstin-15-opal-283254.jpg",
         name = "Powder",
         brand = "Vichy",
-        description = listOf(Description(fullName = "Vichy liftactiv flexiteint anti-wrinkle liquid powder" ,
-            shade = "45 gold", packaging = "30ml", purpose = "Liquid anti-wrinkle powder with a tightening silicone texture for an immediate lifting effect and a healthy skin glow without stiffening facial features.",
-            collection = "Vichy lifeactiv")
+        description = listOf(
+            com.example.beautynoteapp.data.Description(
+                fullName = "Vichy liftactiv flexiteint anti-wrinkle liquid powder",
+                shade = "45 gold",
+                packaging = "30ml",
+                purpose = "Liquid anti-wrinkle powder with a tightening silicone texture for an immediate lifting effect and a healthy skin glow without stiffening facial features.",
+                collection = "Vichy lifeactiv"
+            )
 
         ),
         type = "Face",
@@ -88,12 +75,17 @@ var products: MutableList<Product> = mutableListOf(
 
     Product(
         id = "1",
-        image = R.drawable.mascara_maybelline,
+        image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2IM1KHa8f7G5HWwX1Iozr-gX4sixf2aFXCA&s",
         name = "Mascara",
         brand = "Maybelline",
-        description = listOf(Description(fullName = "Lash Sensational Mascara Firework" ,
-            shade = "Black", packaging = "10ml", purpose = "Mascara for defined eyelashes full of volume, without lumps",
-            collection = "Lash Sensational")
+        description = listOf(
+            com.example.beautynoteapp.data.Description(
+                fullName = "Lash Sensational Mascara Firework",
+                shade = "Black",
+                packaging = "10ml",
+                purpose = "Mascara for defined eyelashes full of volume, without lumps",
+                collection = "Lash Sensational"
+            )
 
         ),
         type = "Eyes",
@@ -105,12 +97,17 @@ var products: MutableList<Product> = mutableListOf(
 
     Product(
         id = "2",
-        image = R.drawable.ruz_mac,
+        image = "https://www.bnedutyfree.com.au/media/catalog/product/cache/e6410293f9a24f502cd707ec5c46309d/7/d/7dee3a48-e070-4d61-b583-c76a958b22d5.jpeg",
         name = "Lipstick",
         brand = "Mac",
-        description = listOf(Description(fullName = "MACximal Silky Matte Lipstick",
-            shade = "Mehr", packaging = "3.5ml", purpose = "Lipstick provides rich, long-lasting color for up to 12 hours nourishes and hydrates thanks to its nourishing composition provides full color coverage with a matte finish.",
-            collection = "MAC Powder Kiss")
+        description = listOf(
+            com.example.beautynoteapp.data.Description(
+                fullName = "MACximal Silky Matte Lipstick",
+                shade = "Mehr",
+                packaging = "3.5ml",
+                purpose = "Lipstick provides rich, long-lasting color for up to 12 hours nourishes and hydrates thanks to its nourishing composition provides full color coverage with a matte finish.",
+                collection = "MAC Powder Kiss"
+            )
 
         ),
         type = "Lips",
@@ -122,12 +119,17 @@ var products: MutableList<Product> = mutableListOf(
 
     Product(
         id = "3",
-        image = R.drawable.brows_gel,
+        image = "https://www.trekpleister.nl/medias/sys_master/prd-images/h0e/h41/30121210118174/prd-front-3316461-1_600x600/prd-front-3316461-1-600x600.jpg",
         name = "Brow gel",
         brand = "Essence",
-        description = listOf(Description(fullName = "Make Me Brow Eyebrow Gel Mascara",
-            shade = "04 Ashy Brows", packaging = "3.8ml", purpose = "Colored eyebrow gel with fine fibers that fills, shapes and gives a natural look to the eyebrows.",
-            collection = "Essence Make Me Brow")
+        description = listOf(
+            com.example.beautynoteapp.data.Description(
+                fullName = "Make Me Brow Eyebrow Gel Mascara",
+                shade = "04 Ashy Brows",
+                packaging = "3.8ml",
+                purpose = "Colored eyebrow gel with fine fibers that fills, shapes and gives a natural look to the eyebrows.",
+                collection = "Essence Make Me Brow"
+            )
 
         ),
         type = "Brows",
@@ -139,11 +141,11 @@ var products: MutableList<Product> = mutableListOf(
 
 )
 
-@Composable
-fun BeautyNoteScreen(navigation: NavController) {
-    // Koristimo mutableStateOf za pohranu liste proizvoda
-    var productsList by remember { mutableStateOf(products.toMutableList()) }  // Početni proizvodi
 
+@Composable
+fun BeautyNoteScreen(navigation: NavController,currentActiveButton: Int, onButtonClick: (Int) -> Unit) {
+
+    var productsList by remember { mutableStateOf(products.toMutableList()) }
     var selectedType by remember { mutableStateOf("Face") }
     var searchQuery by remember { mutableStateOf("") }
 
@@ -159,7 +161,9 @@ fun BeautyNoteScreen(navigation: NavController) {
             )
     ) {
         item {
-            ChoiceButton(navController = navigation)
+            ChoiceButton(navController = navigation,
+                currentActiveButton = currentActiveButton,
+                onButtonClick = onButtonClick)
         }
 
         item {
@@ -212,18 +216,17 @@ fun BeautyNoteScreen(navigation: NavController) {
 
         item {
             IconButton(
-                iconResource = R.drawable.ic_plus, // Ikona za dodavanje proizvoda
+                iconResource = R.drawable.ic_plus,
                 text = "Add new product",
                 onClick = {
-                    navigation.navigate(Routes.SCREEN_ADD_PRODUCT) // Navigacija na ekran za dodavanje proizvoda
+                    navigation.navigate(Routes.SCREEN_ADD_PRODUCT)
                 }
             )
         }
     }
 }
 
-
-    @Composable
+@Composable
 fun ScreenTitle(title: String, subtitle: String) {
     Box(
         modifier = Modifier
@@ -236,7 +239,7 @@ fun ScreenTitle(title: String, subtitle: String) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start
         ) {
-            // Naslov
+
             Text(
                 text = title,
                 style = TextStyle(
@@ -250,7 +253,7 @@ fun ScreenTitle(title: String, subtitle: String) {
                     .padding(top = 8.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            // Podnaslov
+
             Text(
                 text = subtitle,
                 style = TextStyle(
@@ -333,7 +336,6 @@ fun TabButton(
                 containerColor = Color(0xffc2185b)
             )
         } else {
-
             ButtonDefaults.buttonColors(
                 contentColor = Color(0xffc2185b),
                 containerColor = Color.White
@@ -375,14 +377,13 @@ fun MakeupCategories(selectedType: String, onTypeSelected: (String) -> Unit) {
 }
 
 @Composable
-fun ChoiceButton(navController: NavController) {
-    var currentActiveButton by remember { mutableStateOf(0) }
+fun ChoiceButton(navController: NavController, currentActiveButton: Int, onButtonClick: (Int) -> Unit) {
 
     Row(
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(top = 60.dp, bottom = 10.dp)
+            .padding(top = 70.dp, bottom = 10.dp)
             .background(Color.Transparent)
             .fillMaxWidth()
             .height(44.dp)
@@ -391,7 +392,7 @@ fun ChoiceButton(navController: NavController) {
             text = "Products",
             isActive = currentActiveButton == 0
         ) {
-            currentActiveButton = 0
+            onButtonClick(0)
             navController.navigate(Routes.SCREEN_ALL_PRODUCTS)
         }
 
@@ -401,7 +402,7 @@ fun ChoiceButton(navController: NavController) {
             text = "List",
             isActive = currentActiveButton == 1
         ) {
-            currentActiveButton = 1
+            onButtonClick(1)
             navController.navigate(Routes.SCREEN_LIST)
         }
     }
@@ -421,26 +422,34 @@ fun AppLogo() {
 
 @Composable
 fun ProductCard(
-    @DrawableRes imageResource: Int,
+    imageResource: String,
     title: String,
     subtitle: String,
     productId: String,
     navigation: NavController,
 ) {
+
+    val validImageUrl = if (imageResource.startsWith("http")) imageResource else "default_image_url"
+
     Box(
         modifier = Modifier
             .width(270.dp)
             .height(290.dp)
             .padding(top=20.dp, bottom = 18.dp)
     ) {
-        Image(
-            painter = painterResource(imageResource),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(12.dp))
+        val painter = rememberAsyncImagePainter(
+            model = imageResource,
+            error = painterResource(id = R.drawable.error_photo),
+            placeholder = painterResource(id = R.drawable.placeholder)
         )
+
+        Image(
+            painter = painter,
+            contentDescription = "Product Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -452,12 +461,19 @@ fun ProductCard(
             // Corrected navigation logic
             Button(
                 onClick = {
-                    navigation.navigate(Routes.getProductDetailsPath(productId))
+
+                            navigation.navigate(Routes.getProductDetailsPath(productId))
+                            val route = Routes.getProductDetailsPath(productId)
+                            navigation.navigate(route)
                 },
-                colors =  ButtonDefaults.buttonColors(contentColor = Color(0xfff8bbd0), containerColor = Color(0xffc2185b))
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color(0xfff8bbd0),
+                    containerColor = Color(0xffc2185b)
+                )
             ) {
                 Text(text = "See details")
             }
+
         }
     }
 }
