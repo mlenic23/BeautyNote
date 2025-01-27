@@ -54,7 +54,7 @@ import com.example.beautynoteapp.data.FullProductViewModel
 @Composable
 fun BeautyNoteScreen(navigation: NavController,currentActiveButton: Int, onButtonClick: (Int) -> Unit, viewModel: FullProductViewModel) {
 
-    var selectedType by remember { mutableStateOf("") }
+    var selectedType by remember { mutableStateOf("Face") }
     var searchQuery by remember { mutableStateOf("") }
 
     val productsList = viewModel.productsData
@@ -336,7 +336,7 @@ fun ProductCard(
     title: String,
     subtitle: String,
     productId: Int,
-    navigation: NavController,
+    navigation: NavController
 ) {
 
     Box(

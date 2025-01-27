@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.Text
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +41,7 @@ import com.example.beautynoteapp.R
 import com.example.beautynoteapp.data.Description
 import com.example.beautynoteapp.data.FullProductViewModel
 import com.example.beautynoteapp.data.Product
-import java.util.UUID
+
 
 @Composable
 fun ProductTypeButtons(
@@ -52,13 +54,12 @@ fun ProductTypeButtons(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        // Iterate over each product type
         productTypes.forEach { type ->
             Button(
                 onClick = { onTypeSelected(type) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedType == type) Color(0xffc51162) else Color.Gray,
-                    contentColor = Color.White
+                    containerColor = if (selectedType == type) Color(0xffc51162) else Color.White,
+                    contentColor = if (selectedType == type) Color.White else Color(0xffc51162)
                 ),
                 modifier = Modifier
                     .weight(1f)
@@ -95,17 +96,20 @@ fun AddProductForm(
     val products = viewModel.products
 
     val textFieldColors = TextFieldDefaults.textFieldColors(
-        containerColor = Color.LightGray,
-        focusedIndicatorColor = Indigo900,
-        unfocusedIndicatorColor = LightBlue800,
-        unfocusedTextColor = Color.Black,
-        focusedTextColor = Grey800,
-        unfocusedLabelColor = Indigo900,
-        focusedLabelColor = Indigo900,
-        cursorColor = Indigo900
+        containerColor = Color.White,
+        focusedIndicatorColor = Color.White,
+        unfocusedIndicatorColor = Color.White,
+        unfocusedTextColor = Color(0xffc51162),
+        focusedTextColor = Color(0xffc51162),
+        unfocusedLabelColor = Color(0xfff06292),
+        focusedLabelColor = Color(0xffc51162),
+        cursorColor = Color(0xfff06292)
+
     )
 
+
     Box(modifier = Modifier.fillMaxSize()){
+
         Image(
             painter = painterResource(id = R.drawable.adder3),
             contentDescription = "Background Image",
@@ -121,34 +125,21 @@ fun AddProductForm(
                 .verticalScroll(scrollState)
 
         ){
-            ScreenTitle(title="BeautyNote", subtitle = "")
+            ScreenTitle(title="BeautyNote", subtitle = "\"Makeup is face art.\"")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Product Name") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = image,
-                onValueChange = { image = it },
-                label = { Text("Image URL") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = brand,
-                onValueChange = { brand = it },
-                label = { Text("Brand") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text("Used", style = TextStyle(Color(0xffc51162), fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                Checkbox(checked = isUsed, onCheckedChange = { isUsed = it },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color(0xffc51162),
+                        checkmarkColor = Color.White ))
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -160,10 +151,41 @@ fun AddProductForm(
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Product Name") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextField(
+                value = image,
+                onValueChange = { image = it },
+                label = { Text("Image URL") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextField(
+                value = brand,
+                onValueChange = { brand = it },
+                label = { Text("Brand") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextField(
                 value = price,
                 onValueChange = { price = it },
                 label = { Text("Price") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -172,7 +194,8 @@ fun AddProductForm(
                 value = rating,
                 onValueChange = { rating = it },
                 label = { Text("Rating") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -181,7 +204,8 @@ fun AddProductForm(
                 value = fullName,
                 onValueChange = { fullName = it },
                 label = { Text("Full Name") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -190,7 +214,8 @@ fun AddProductForm(
                 value = shade,
                 onValueChange = { shade = it },
                 label = { Text("Shade") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -199,16 +224,19 @@ fun AddProductForm(
                 value = packaging,
                 onValueChange = { packaging = it },
                 label = { Text("Packaging") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
-                    value = purpose,
-            onValueChange = { purpose = it },
-            label = { Text("Purpose") },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                value = purpose,
+                onValueChange = { purpose = it },
+                label = { Text("Purpose") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
+
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -217,24 +245,16 @@ fun AddProductForm(
                 value = collection,
                 onValueChange = { collection = it },
                 label = { Text("Collection") },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text("Used", style = TextStyle(color = LightBlue200, fontSize = 18.sp))
-                Checkbox(checked = isUsed, onCheckedChange = { isUsed = it })
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
+                    if (name.isNotEmpty() && image.isNotEmpty() && brand.isNotEmpty()){
                     val newProduct = Product(
                         id = products.size,
                         name = name,
@@ -256,7 +276,8 @@ fun AddProductForm(
                     )
                     viewModel.addProduct(newProduct)
                     navigation.popBackStack()
-                },
+                }},
+
                 modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 30.dp),

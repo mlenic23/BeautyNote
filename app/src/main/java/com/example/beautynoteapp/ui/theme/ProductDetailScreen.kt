@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -60,10 +61,12 @@ fun TopImageAndBar(
     product: Product
 ) {
     var isUsed by remember { mutableStateOf(product.isUsed) }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -83,6 +86,7 @@ fun TopImageAndBar(
                 CircularButton(
                     R.drawable.ic_arrow_back, color =  Color(0xffc51162),  onClick = { navigation.navigate(
                         Routes.SCREEN_ALL_PRODUCTS) })
+
                 StatusButton(
                     iconResource = if (isUsed) R.drawable.tick else R.drawable.x__1_,
                     color = if (isUsed) Color(0xffc51162) else Color.LightGray,
@@ -101,7 +105,6 @@ fun TopImageAndBar(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                Color.White
                             ),
                             startY = 100f
                         )
@@ -178,8 +181,14 @@ fun ScreenInfo(
 
     Column {
 
+        val painter = rememberAsyncImagePainter(
+            model = imageResource,
+            error = painterResource(id = R.drawable.error_photo),
+            placeholder = painterResource(id = R.drawable.placeholder)
+
+        )
         Image(
-            painter = rememberAsyncImagePainter(model = imageResource),
+            painter = painter,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -367,6 +376,8 @@ fun ProductDetailsScreen(
         return
     }
 
+    val scrollState = rememberLazyListState()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -380,6 +391,7 @@ fun ProductDetailsScreen(
         LazyColumn(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
+            state = scrollState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 16.dp)

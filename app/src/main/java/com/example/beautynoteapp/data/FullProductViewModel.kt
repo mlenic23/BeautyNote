@@ -11,12 +11,12 @@ class FullProductViewModel : ViewModel() {
         productsData.addAll(
             listOf(
                 Product(
-                    id = 0,
+                    id = 1,
                     image = "https://www.lijepa.hr/data/cache/thumb_min500_max1000-min500_max1000-12/products/339187/1683200741/vichy-liftactiv-flexiteint-spf20-puder-za-zene-30-ml-odstin-15-opal-283254.jpg",
                     name = "Powder",
                     brand = "Vichy",
                     description = listOf(
-                        com.example.beautynoteapp.data.Description(
+                        Description(
                             fullName = "Vichy liftactiv flexiteint anti-wrinkle liquid powder",
                             shade = "45 gold",
                             packaging = "30ml",
@@ -32,12 +32,12 @@ class FullProductViewModel : ViewModel() {
                 ),
 
                 Product(
-                    id = 1,
+                    id = 2,
                     image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2IM1KHa8f7G5HWwX1Iozr-gX4sixf2aFXCA&s",
                     name = "Mascara",
                     brand = "Maybelline",
                     description = listOf(
-                        com.example.beautynoteapp.data.Description(
+                        Description(
                             fullName = "Lash Sensational Mascara Firework",
                             shade = "Black",
                             packaging = "10ml",
@@ -54,12 +54,12 @@ class FullProductViewModel : ViewModel() {
                     ),
 
                 Product(
-                    id = 2,
+                    id = 3,
                     image = "https://www.bnedutyfree.com.au/media/catalog/product/cache/e6410293f9a24f502cd707ec5c46309d/7/d/7dee3a48-e070-4d61-b583-c76a958b22d5.jpeg",
                     name = "Lipstick",
                     brand = "Mac",
                     description = listOf(
-                        com.example.beautynoteapp.data.Description(
+                        Description(
                             fullName = "MACximal Silky Matte Lipstick",
                             shade = "Mehr",
                             packaging = "3.5ml",
@@ -76,12 +76,12 @@ class FullProductViewModel : ViewModel() {
                     ),
 
                 Product(
-                    id = 3,
+                    id = 4,
                     image = "https://www.beautyaz.gr/19272-large_default/essence-make-me-brow-eyebrow-gel-mascara-04-ashy-brows-38ml.jpg",
                     name = "Brow gel",
                     brand = "Essence",
                     description = listOf(
-                        com.example.beautynoteapp.data.Description(
+                        Description(
                             fullName = "Make Me Brow Eyebrow Gel Mascara",
                             shade = "04 Ashy Brows",
                             packaging = "3.8ml",
@@ -107,8 +107,8 @@ class FullProductViewModel : ViewModel() {
         productsData.add(product.copy(id = newId))
     }
 
-    fun getProductById(id: Int): Product? {
-        return productsData.find { id == id }
+    fun getProductById(productId: Int): Product? {
+        return productsData.find { it.id == productId }
     }
 
 }

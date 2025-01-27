@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +35,7 @@ import com.example.beautynoteapp.R
 import com.example.beautynoteapp.data.ProductViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListScreen(
     navigation: NavController,
@@ -123,19 +126,33 @@ fun ListScreen(
             )
         }
 
+        val textFieldColors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.White,
+            focusedIndicatorColor = Color.White,
+            unfocusedIndicatorColor = Color.White,
+            unfocusedTextColor = Color(0xffc51162),
+            focusedTextColor = Color(0xffc51162),
+            unfocusedLabelColor = Color(0xfff06292),
+            focusedLabelColor = Color(0xffc51162),
+            cursorColor = Color(0xfff06292)
+
+        )
+
         if (isAddingProduct) {
             Column(modifier = Modifier.padding(16.dp)) {
                 TextField(
                     value = newProductName,
                     onValueChange = { newProductName = it },
                     label = { Text("Product Name") },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    colors = textFieldColors
                 )
                 TextField(
                     value = newProductBrand,
                     onValueChange = { newProductBrand = it },
                     label = { Text("Product Brand") },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    colors = textFieldColors
                 )
                 CircularButton(
                     onClick = { addProduct(newProductName, newProductBrand) },

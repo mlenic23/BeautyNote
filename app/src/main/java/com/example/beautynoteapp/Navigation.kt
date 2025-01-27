@@ -55,7 +55,7 @@ fun NavigationController(viewModel: ProductViewModel) {
                     type = NavType.IntType
                 }
             )
-        ){backStackEntry -> backStackEntry.arguments?.getInt("stadiumId")?.let {
+        ){backStackEntry -> backStackEntry.arguments?.getInt("productId")?.let {
             ProductDetailsScreen(
                 navigation = navController,
                 productId = it,
