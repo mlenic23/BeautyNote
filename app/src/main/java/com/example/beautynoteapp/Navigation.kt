@@ -32,7 +32,11 @@ object Routes {
 }
 
 @Composable
-fun NavigationController(viewModel: ProductViewModel) {
+fun NavigationController() {
+
+    val viewModel1 = ProductViewModel()
+    val viewModel2 = FullProductViewModel()
+
     val navController = rememberNavController()
     var currentActiveButton by rememberSaveable { mutableStateOf(0) }
 
@@ -44,7 +48,7 @@ fun NavigationController(viewModel: ProductViewModel) {
             BeautyNoteScreen(
                 navigation = navController,
                 currentActiveButton = currentActiveButton,
-                viewModel = FullProductViewModel(),
+                viewModel = viewModel2,
                 onButtonClick = { newIndex -> currentActiveButton = newIndex }
             )
         }
@@ -59,7 +63,7 @@ fun NavigationController(viewModel: ProductViewModel) {
             ProductDetailsScreen(
                 navigation = navController,
                 productId = it,
-                viewModel = FullProductViewModel()
+                viewModel = viewModel2
             )
         } }
 
@@ -67,14 +71,14 @@ fun NavigationController(viewModel: ProductViewModel) {
             ListScreen(
                 navigation = navController,
                 currentActiveButton = currentActiveButton,
-                viewModel = viewModel,
+                viewModel = viewModel1,
                 onButtonClick = { newIndex -> currentActiveButton = newIndex }
             )
         }
         composable(Routes.SCREEN_ADD_PRODUCT) {
             AddProductForm(
                 navigation = navController,
-                viewModel = FullProductViewModel(),
+                viewModel = viewModel2,
             )
         }
     }

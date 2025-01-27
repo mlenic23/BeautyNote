@@ -2,7 +2,6 @@
 
 package com.example.beautynoteapp.ui.theme
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -365,9 +364,26 @@ fun ProductCard(
                 .padding(horizontal = 10.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Text(title, color = Color(0xffad1457))
-            Text(subtitle, color = Color(0xffff80ab))
-            // Corrected navigation logic
+            Box(
+                modifier = Modifier
+                    .background(Color(0x80FFFFFF)) // Semi-transparent white background (alpha 50%)
+                    .padding(8.dp) // Optional padding to give some space around the text
+            ) {
+                Column {
+                    Text(
+                        title,
+                        color = Color(0xffad1457),
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    )
+                    Text(
+                        subtitle,
+                        color = Color(0xffff80ab),
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    )
+                }
+            }
+
+
             Button(
                 onClick = {
                     navigation.navigate(Routes.getProductDetailsPath(productId))
@@ -376,7 +392,11 @@ fun ProductCard(
                     contentColor = Color(0xfff8bbd0),
                     containerColor = Color(0xffc2185b)
                 ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(35.dp)
+                    .padding(start=2.dp)
+
             ) {
                 Text(text = "See details")
             }
