@@ -1,7 +1,7 @@
 package com.example.beautynoteapp.data
 
 data class Product(
-    var id: String = "",
+    var id: Int,
     var image: String = "",
     var name: String = "",
     var brand: String = "",
@@ -11,7 +11,6 @@ data class Product(
     var rating: String = "",
     var isUsed: Boolean = false
 )
-
 
 data class Description(
     var fullName: String = "",

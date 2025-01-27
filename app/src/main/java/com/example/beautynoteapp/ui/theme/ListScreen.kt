@@ -33,14 +33,13 @@ import com.example.beautynoteapp.R
 import com.example.beautynoteapp.data.ProductViewModel
 
 
-data class ProductList(
-    var name: String,
-    var brand: String
-)
-
 @Composable
-fun ListScreen(navigation: NavController, viewModel: ProductViewModel, currentActiveButton: Int, onButtonClick: (Int) -> Unit) {
-
+fun ListScreen(
+    navigation: NavController,
+    viewModel: ProductViewModel,
+    currentActiveButton: Int,
+    onButtonClick: (Int) -> Unit
+) {
     // UI elements
     Box(
         modifier = Modifier.fillMaxSize()
@@ -73,7 +72,6 @@ fun ListScreen(navigation: NavController, viewModel: ProductViewModel, currentAc
     }
 
     Column(modifier = Modifier.padding(16.dp)) {
-
         ChoiceButton(
             navController = navigation,
             currentActiveButton = currentActiveButton,
@@ -82,7 +80,7 @@ fun ListScreen(navigation: NavController, viewModel: ProductViewModel, currentAc
 
         ScreenTitle(
             title = "BeautyNote",
-            subtitle= "\"Life is short, buy the makeup.\""
+            subtitle = "\"Life is short, buy the makeup.\""
         )
 
         Spacer(modifier = Modifier.padding(top = 20.dp))

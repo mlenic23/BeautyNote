@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
 }
 
 android {
@@ -59,6 +60,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
     implementation ("io.coil-kt:coil-compose:2.3.0")
     implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation ("io.coil-kt:coil-compose:2.4.0")
+    //implementation(libs.coil.compose)
 
 
 

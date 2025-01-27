@@ -35,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -51,12 +50,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.beautynoteapp.R
 import com.example.beautynoteapp.Routes
+import com.example.beautynoteapp.data.FullProductViewModel
 import com.example.beautynoteapp.data.Product
 
 
 @Composable
 fun TopImageAndBar(
-    imageResource: String,
     navigation: NavController,
     product: Product
 ) {
@@ -71,17 +70,6 @@ fun TopImageAndBar(
                 .fillMaxHeight()
         ) {
 
-            val painter = rememberAsyncImagePainter(model = imageResource)
-
-            Image(
-                painter = painter,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .clip(RoundedCornerShape(12.dp))
-            )
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -185,7 +173,7 @@ fun StatusButton(
 fun ScreenInfo(
     name: String,
     brand: String,
-    imageResource: String,
+    imageResource: Any,
 ) {
 
     Column {
@@ -362,34 +350,13 @@ fun Description(product: Product) {
 
 
 @Composable
-fun ListButton() {
-    Button(
-        onClick = { /*TODO*/ },
-        elevation = null,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xffc51162),
-            contentColor = Color.White
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 70.dp)
-            .padding(top = 20.dp)
-
-
-    ) {
-        Text(text = "Add to list", modifier = Modifier.padding(8.dp))
-    }
-}
-
-@Composable
 fun ProductDetailsScreen(
     navigation: NavController,
-    productId: String
+    productId: Int,
+    viewModel: FullProductViewModel
 ) {
-    // Pronađi proizvod na osnovu ID-a
-    val product = products.find { it.id == productId }
+    val product = viewModel.getProductById(productId)
 
-    // Ako proizvod nije pronađen, prikaži poruku
     if (product == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -403,7 +370,6 @@ fun ProductDetailsScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Pozadina
         Image(
             painter = painterResource(id = R.drawable.backgrounddetail),
             contentDescription = "Background Image",
@@ -411,7 +377,6 @@ fun ProductDetailsScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Detalji proizvoda
         LazyColumn(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
@@ -420,28 +385,20 @@ fun ProductDetailsScreen(
                 .padding(top = 16.dp)
         ) {
             item {
-                // Gornja slika i navigaciona traka
                 TopImageAndBar(
-                    imageResource = product.image,
                     navigation = navigation,
                     product = product
                 )
 
-                // Informacije o proizvodu
                 ScreenInfo(
                     name = product.name,
                     brand = product.brand,
                     imageResource = product.image
                 )
 
-                // Osnovne informacije
                 BasicInfo(product)
 
-                // Opis proizvoda
                 Description(product)
-
-                // Dugme za listu
-                ListButton()
             }
         }
     }

@@ -5,19 +5,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.beautynoteapp.data.FullProductViewModel
 import com.example.beautynoteapp.data.ProductViewModel
-import com.example.beautynoteapp.ui.theme.AddProductScreen
+import com.example.beautynoteapp.ui.theme.AddProductForm
 import com.example.beautynoteapp.ui.theme.BeautyNoteScreen
 import com.example.beautynoteapp.ui.theme.ListScreen
 import com.example.beautynoteapp.ui.theme.ProductDetailsScreen
-import com.example.beautynoteapp.ui.theme.products
 
 object Routes {
     const val SCREEN_ALL_PRODUCTS = "productsList"
@@ -25,8 +23,11 @@ object Routes {
     const val SCREEN_LIST = "List"
     const val SCREEN_ADD_PRODUCT = "addProductScreen"
 
-    fun getProductDetailsPath(productId: String): String {
-        return "productDetails/$productId"
+    fun getProductDetailsPath(productId: Int?) : String {
+        if (productId != null && productId != -1) {
+            return "productDetails/$productId"
+        }
+        return "productDetails/0"
     }
 }
 
@@ -43,6 +44,7 @@ fun NavigationController(viewModel: ProductViewModel) {
             BeautyNoteScreen(
                 navigation = navController,
                 currentActiveButton = currentActiveButton,
+                viewModel = FullProductViewModel(),
                 onButtonClick = { newIndex -> currentActiveButton = newIndex }
             )
         }
@@ -50,16 +52,16 @@ fun NavigationController(viewModel: ProductViewModel) {
             Routes.SCREEN_PRODUCTS_DETAILS,
             arguments = listOf(
                 navArgument("productId") {
-                    type  = NavType.StringType
+                    type = NavType.IntType
                 }
             )
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?:0
+        ){backStackEntry -> backStackEntry.arguments?.getInt("stadiumId")?.let {
             ProductDetailsScreen(
                 navigation = navController,
-                productId = productId.toString()
+                productId = it,
+                viewModel = FullProductViewModel()
             )
-        }
+        } }
 
         composable(Routes.SCREEN_LIST) {
             ListScreen(
@@ -69,13 +71,10 @@ fun NavigationController(viewModel: ProductViewModel) {
                 onButtonClick = { newIndex -> currentActiveButton = newIndex }
             )
         }
-
         composable(Routes.SCREEN_ADD_PRODUCT) {
-            AddProductScreen(
+            AddProductForm(
                 navigation = navController,
-                onProductAdded = { newProduct ->
-                    products.add(newProduct)
-                }
+                viewModel = FullProductViewModel(),
             )
         }
     }
