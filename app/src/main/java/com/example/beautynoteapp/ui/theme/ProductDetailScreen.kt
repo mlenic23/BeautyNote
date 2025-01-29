@@ -59,16 +59,12 @@ fun TopImageAndBar(
     product: Product
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
-
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxHeight()
+            modifier = Modifier.fillMaxHeight()
         ) {
-
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -77,14 +73,14 @@ fun TopImageAndBar(
                     .statusBarsPadding()
                     .height(56.dp)
                     .padding(horizontal = 16.dp)
-
             ) {
                 CircularButton(
-                    R.drawable.ic_arrow_back, color = Color(0xffc51162), onClick = {
-                        navigation.navigate(
-                            Routes.SCREEN_ALL_PRODUCTS
-                        )
-                    })
+                    iconResource = R.drawable.ic_arrow_back,
+                    color = Color(0xffc51162),
+                    onClick = {
+                        navigation.navigate(Routes.SCREEN_ALL_PRODUCTS)
+                    }
+                )
 
                 StatusButton(product = product)
             }
@@ -92,12 +88,10 @@ fun TopImageAndBar(
     }
 }
 
-
-
 @Composable
 fun CircularButton(
     @DrawableRes iconResource: Int,
-    color: Color=White,
+    color: Color = White,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(defaultElevation = 12.dp),
     onClick: () -> Unit = {}
 ) {
@@ -113,7 +107,7 @@ fun CircularButton(
     ) {
         Icon(
             painter = painterResource(id = iconResource),
-            contentDescription = null,
+            contentDescription = null
         )
     }
 }
@@ -189,6 +183,7 @@ fun ScreenInfo(
                 modifier = Modifier
                 .padding(horizontal = 16.dp)
         )
+
     }
 }
 
@@ -232,10 +227,9 @@ fun BasicInfo(product: Product) {
 }
 
 @Composable
-fun Description(product: Product) {
+fun Description(product: Product, onDelete: () -> Unit) {
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 20.dp)
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
     ) {
         product.description.forEach { desc ->
             if (desc.fullName.isNotEmpty()) {
@@ -244,97 +238,105 @@ fun Description(product: Product) {
                     fontWeight = FontWeight.Bold,
                     style = TextStyle(color = Color(0xffc51162), fontSize = 20.sp),
                     modifier = Modifier.padding(vertical = 4.dp)
-                        .padding(bottom=20.dp)
+                        .padding(bottom = 20.dp)
                 )
+            }
+
+
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+                if (desc.shade.isNotEmpty()) {
+                    Text(
+                        text = "Shade: ",
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
+                        color = Color(0xfff06292),
+                    )
+                    Text(
+                        text = desc.shade,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black,
+                        style = TextStyle(fontSize = 18.sp),
+                        modifier = Modifier.padding(start = 26.dp)
+                    )
+                }
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.padding(bottom = 5.dp)
             ) {
-            if (desc.shade.isNotEmpty()) {
-                Text(
-                    text = "Shade: ",
-                    fontWeight = FontWeight.Bold,
-                    style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
-                    color = Color(0xfff06292),
-                )
-                Text(
-                    text = desc.shade,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    style = TextStyle(fontSize = 18.sp),
-                    modifier = Modifier.padding(start = 26.dp)
-                )
-            }}
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.padding(bottom = 5.dp)
-            ) {
-
-            if (desc.packaging.isNotEmpty()) {
-                Text(
-                    text = "Package: ",
-                    fontWeight = FontWeight.Bold,
-                    style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
-                    color = Color(0xfff06292),
-                )
-                Text(
-                    text = desc.packaging,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    style = TextStyle(fontSize = 18.sp),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }}
+                if (desc.packaging.isNotEmpty()) {
+                    Text(
+                        text = "Package: ",
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
+                        color = Color(0xfff06292),
+                    )
+                    Text(
+                        text = desc.packaging,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black,
+                        style = TextStyle(fontSize = 18.sp),
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }}
 
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-            if (desc.purpose.isNotEmpty()) {
-                Text(
-                    text = "Purpose: ",
-                    fontWeight = FontWeight.Bold,
-                    style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
-                    color = Color(0xfff06292),
-                    modifier = Modifier.padding(top = 2.dp, bottom = 5.dp)
-                )
-                Text(
-                    text = desc.purpose,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    style = TextStyle(fontSize = 18.sp),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }}
+                if (desc.purpose.isNotEmpty()) {
+                    Text(
+                        text = "Purpose: ",
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
+                        color = Color(0xfff06292),
+                        modifier = Modifier.padding(top = 2.dp, bottom = 5.dp)
+                    )
+                    Text(
+                        text = desc.purpose,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black,
+                        style = TextStyle(fontSize = 18.sp),
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }}
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.padding(top = 5.dp)
 
             ) {
-            if (desc.collection.isNotEmpty()) {
-                Text(
-                    text = "Collection: ",
-                    fontWeight = FontWeight.Bold,
-                    style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
-                    color = Color(0xfff06292),
-                )
-                Text(
-                    text = desc.collection,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    style = TextStyle(fontSize = 18.sp),
-                    modifier = Modifier.padding(start = 7.dp)
-                )
-            }}
+                if (desc.collection.isNotEmpty()) {
+                    Text(
+                        text = "Collection: ",
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(textDecoration = TextDecoration.Underline, fontSize = 18.sp),
+                        color = Color(0xfff06292),
+                        modifier = Modifier.padding(bottom=20.dp)
+                    )
+                    Text(
+                        text = desc.collection,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black,
+                        style = TextStyle(fontSize = 18.sp),
+                        modifier = Modifier.padding(start = 7.dp, bottom=20.dp)
+                    )
+                }}
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            CircularButton(
+                iconResource = R.drawable.x__1_,
+                color = Color(0xffc51162),
+                onClick = { onDelete() }
+            )
         }
     }
 }
+
 
 
 @Composable
@@ -353,6 +355,11 @@ fun ProductDetailsScreen(
             Text("Product not found", color = Color.Red)
         }
         return
+    }
+
+    val onDelete: () -> Unit = {
+        viewModel.removeProduct(productId)
+        navigation.popBackStack()
     }
 
     val scrollState = rememberLazyListState()
@@ -381,19 +388,18 @@ fun ProductDetailsScreen(
                     product = product
                 )
 
-                ScreenInfo(
-                    name = product.name,
-                    brand = product.brand,
-                    imageResource = product.image
-                )
+                ScreenInfo(name = product.name, brand = product.brand, imageResource = product.image)
 
                 BasicInfo(product)
 
-                Description(product)
+                Description(
+                    product = product, onDelete = onDelete
+                )
             }
         }
     }
 }
+
 
 
 

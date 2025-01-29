@@ -328,5 +328,10 @@ class FullProductViewModel : ViewModel() {
     fun getProductById(productId: Int): Product? {
         return productsData.find { it.id == productId }
     }
+
+    fun removeProduct(productId: Int) {
+        productsData.removeIf { it.id == productId }
+    }
+
 }
 
