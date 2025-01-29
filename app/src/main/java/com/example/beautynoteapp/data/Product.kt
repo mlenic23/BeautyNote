@@ -9,7 +9,7 @@ data class Product(
     var type: String = "",
     var price: String = "",
     var rating: String = "",
-    var isUsed: Boolean = false
+    var status: Int = 0
 )
 
 data class Description(

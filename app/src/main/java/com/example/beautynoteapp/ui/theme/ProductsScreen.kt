@@ -366,8 +366,8 @@ fun ProductCard(
         ) {
             Box(
                 modifier = Modifier
-                    .background(Color(0x80FFFFFF)) // Semi-transparent white background (alpha 50%)
-                    .padding(8.dp) // Optional padding to give some space around the text
+                    .background(Color(0x80FFFFFF))
+                    .padding(8.dp)
             ) {
                 Column {
                     Text(
@@ -402,7 +402,8 @@ fun ProductCard(
             }
 
         }
-    }}
+    }
+}
 
 
 

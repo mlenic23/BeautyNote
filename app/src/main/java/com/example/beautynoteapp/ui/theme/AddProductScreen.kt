@@ -14,8 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.Text
@@ -31,11 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.beautynoteapp.R
 import com.example.beautynoteapp.data.Description
@@ -86,7 +81,6 @@ fun AddProductForm(
     var type by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var rating by remember { mutableStateOf("") }
-    var isUsed by remember { mutableStateOf(false) }
     var fullName by remember { mutableStateOf("") }
     var shade by remember { mutableStateOf("") }
     var packaging by remember { mutableStateOf("") }
@@ -126,20 +120,6 @@ fun AddProductForm(
 
         ){
             ScreenTitle(title="BeautyNote", subtitle = "\"Makeup is face art.\"")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text("Used", style = TextStyle(Color(0xffc51162), fontSize = 20.sp, fontWeight = FontWeight.Bold))
-                Checkbox(checked = isUsed, onCheckedChange = { isUsed = it },
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = Color(0xffc51162),
-                        checkmarkColor = Color.White ))
-            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -263,7 +243,6 @@ fun AddProductForm(
                         type = type,
                         price = price,
                         rating = rating,
-                        isUsed = isUsed,
                         description = listOf(
                             Description(
                                 fullName = fullName,

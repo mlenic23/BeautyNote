@@ -28,7 +28,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Face",
                     price = "30€",
                     rating = "4",
-                    isUsed = false,
+                    status = 0
                 ),
 
                 Product(
@@ -49,7 +49,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Eyes",
                     price = "21€",
                     rating = "5",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -71,7 +71,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Lips",
                     price = "20€",
                     rating = "3",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -93,7 +93,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Brows",
                     price = "3€",
                     rating = "2",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -115,7 +115,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Eyes",
                     price = "60€",
                     rating = "5",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -137,7 +137,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Face",
                     price = "34€",
                     rating = "4",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -159,7 +159,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Face",
                     price = "9€",
                     rating = "3",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -181,7 +181,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Lips",
                     price = "6€",
                     rating = "4",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -203,7 +203,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Brows",
                     price = "10€",
                     rating = "5",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -226,7 +226,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Face",
                     price = "11€",
                     rating = "3",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -248,7 +248,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Face",
                     price = "15€",
                     rating = "5",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -270,7 +270,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Eyes",
                     price = "4€",
                     rating = "2",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -292,7 +292,7 @@ class FullProductViewModel : ViewModel() {
                     type = "Lips",
                     price = "8€",
                     rating = "5",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
@@ -313,14 +313,11 @@ class FullProductViewModel : ViewModel() {
                     type = "Brows",
                     price = "3€",
                     rating = "1",
-                    isUsed = false,
+                    status = 0
 
                     ),
 
-
-                )
-        )
-
+                ))
     }
 
     fun addProduct(product:Product){
@@ -331,6 +328,5 @@ class FullProductViewModel : ViewModel() {
     fun getProductById(productId: Int): Product? {
         return productsData.find { it.id == productId }
     }
-
 }
 

@@ -2,7 +2,6 @@ package com.example.beautynoteapp.ui.theme
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.RectangleShape
@@ -60,8 +58,6 @@ fun TopImageAndBar(
     navigation: NavController,
     product: Product
 ) {
-    var isUsed by remember { mutableStateOf(product.isUsed) }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,35 +80,19 @@ fun TopImageAndBar(
 
             ) {
                 CircularButton(
-                    R.drawable.ic_arrow_back, color =  Color(0xffc51162),  onClick = { navigation.navigate(
-                        Routes.SCREEN_ALL_PRODUCTS) })
-
-                StatusButton(
-                    iconResource = if (isUsed) R.drawable.tick else R.drawable.x__1_,
-                    color = if (isUsed) Color(0xffc51162) else Color.LightGray,
-                    text = if (isUsed) "New" else "Empty",
-                    onClick = {
-                        isUsed = !isUsed
-                        product.isUsed = isUsed
-                    }
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                            ),
-                            startY = 100f
+                    R.drawable.ic_arrow_back, color = Color(0xffc51162), onClick = {
+                        navigation.navigate(
+                            Routes.SCREEN_ALL_PRODUCTS
                         )
-                    )
-            )
+                    })
+
+                StatusButton(product = product)
+            }
         }
     }
 }
+
+
 
 @Composable
 fun CircularButton(
@@ -141,35 +121,34 @@ fun CircularButton(
 
 @Composable
 fun StatusButton(
-    @DrawableRes iconResource: Int,
-    color: Color=White,
-    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(defaultElevation = 12.dp),
-    onClick: () -> Unit = {},
-    text : String
+    product: Product
 ) {
-    Column(){
+
+    var statusIndex by remember { mutableStateOf(product.status) }
+
+    val icons = listOf(R.drawable.full, R.drawable.half, R.drawable.empty)
+    val colors = listOf(Color(0xffc51162), Color(0xffc51162), Color(0xffc51162))
+
+
     Button(
         contentPadding = PaddingValues(),
-        elevation = elevation,
-        onClick = { onClick() },
-        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = White),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+        onClick = {
+            statusIndex = (statusIndex + 1) % icons.size
+            product.status = statusIndex
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = colors[statusIndex], contentColor = Color.White),
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(35.dp)
             .height(35.dp)
     ) {
-            Icon(
-                painter = painterResource(id = iconResource),
-                contentDescription = null,
-                modifier = Modifier.size(17.dp)
-            )
-
-        }
-        Text(
-            text = text,
-            color = Color.Black,)
+        Icon(
+            painter = painterResource(id = icons[statusIndex]),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
     }
-
 }
 
 @Composable

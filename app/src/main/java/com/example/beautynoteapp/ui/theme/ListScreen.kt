@@ -43,7 +43,6 @@ fun ListScreen(
     currentActiveButton: Int,
     onButtonClick: (Int) -> Unit
 ) {
-    // UI elements
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -59,7 +58,6 @@ fun ListScreen(
     var newProductBrand by remember { mutableStateOf("") }
     var isAddingProduct by remember { mutableStateOf(false) }
 
-    // Function to add a product
     fun addProduct(name: String, brand: String) {
         if (name.isNotBlank() && brand.isNotBlank()) {
             viewModel.addProduct(name, brand)
@@ -69,7 +67,6 @@ fun ListScreen(
         }
     }
 
-    // Function to delete a product
     fun deleteProduct(index: Int) {
         viewModel.deleteProduct(index)
     }
@@ -88,9 +85,8 @@ fun ListScreen(
 
         Spacer(modifier = Modifier.padding(top = 20.dp))
 
-        // Display product list
         LazyColumn() {
-            itemsIndexed(viewModel.productList) { index, product ->  // Use the ViewModel's product list
+            itemsIndexed(viewModel.productList) { index, product ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
