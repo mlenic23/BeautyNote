@@ -195,7 +195,7 @@ class FullProductViewModel : ViewModel() {
                             fullName = "The ultimate brow enhancing kit",
                             shade = "Medium to Dark",
                             packaging = "9",
-                            purpose = "he Revolution Eyebrow Palette Kit is designed to shape, define, and fill in your eyebrows, offering multiple shades to suit different hair colors for a flawless, natural finish.",
+                            purpose = "The Revolution Eyebrow Palette Kit is designed to shape, define, and fill in your eyebrows, offering multiple shades to suit different hair colors for a flawless, natural finish.",
                             collection = "Revolution Pro"
                         )
 
@@ -262,8 +262,8 @@ class FullProductViewModel : ViewModel() {
                             fullName = "Catrice Calligraph Pro Precise 24h Matt",
                             shade = "010 Intense Black Waterproof",
                             packaging = "1.2ml",
-                            purpose = "Concealer offer buildable, long-lasting coverage",
-                            collection = "Radiant Creamy"
+                            purpose = "This eyeliner is designed to create precise lines with a long-lasting matte finish. Its formula provides high pigmentation and is resistant to water, sweat, and smudging, making it ideal for all-day wear.",
+                            collection = "Calligraph Pro collection"
                         )
 
                     ),
